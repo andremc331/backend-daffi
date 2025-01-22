@@ -9,14 +9,14 @@ dotenv.config();
 // Criação da instância do Sequelize para se conectar ao PostgreSQL
 const sequelize = new Sequelize({
   dialect: 'postgres',
-  host: process.env.DB_HOST, // Exemplo de uso de variável de ambiente
-  port: 5432,
-  username: process.env.DB_USER, // Exemplo de uso de variável de ambiente
-  password: process.env.DB_PASSWORD, // Exemplo de uso de variável de ambiente
-  database: process.env.DB_NAME, // Exemplo de uso de variável de ambiente
+  host: 'autorack.proxy.rlwy.net',
+  port: 12644,
+  username: 'postgres',
+  password: 'BnMZXdCYyNmjhfudskDnvNNDTlZKekWy',
+  database: 'railway',
   logging: false,
   dialectOptions: {
-    connectTimeout: 60000,  // tempo limite de 10 segundos para conectar
+    connectTimeout: 10000,  // tempo limite de 10 segundos para conectar
   },
 });
 
