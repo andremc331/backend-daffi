@@ -10,27 +10,29 @@ import pdfRoutes from './routes/pdfRoutes';
 
 import './models';  // Aqui você chama o arquivo que importa e inicializa os modelos
 
-const app = express();
-
 const allowedOrigins = [
   'https://main.d1txub5s9ryib1.amplifyapp.com', // Frontend hospedado no Amplify
-  'https://backend-daffi.railway.app' // Backend para testes locais, se necessário
+  'https://backend-daffi.railway.app', // Backend hospedado no Railway
 ];
 
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    // Permite origens especificadas ou nenhuma origem (caso origin seja undefined)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true); // A origem é permitida
     } else {
-      callback(new Error('Not allowed by CORS')); // A origem não é permitida
+      callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true, // Permite envio de cookies e headers de autenticação
+  credentials: true, // Permitir cookies e autenticação
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Headers permitidos
 };
 
-// Uso do CORS no Express
+const app = express();
 app.use(cors(corsOptions));
+
+// Adicione uma resposta explícita para requisições OPTIONS
+app.options('*', cors(corsOptions)); // Permite requisições preflight para qualquer rota
 
 app.use(express.json()); // Middleware para fazer o parsing de JSON
 
