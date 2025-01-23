@@ -12,12 +12,26 @@ import './models';  // Aqui você chama o arquivo que importa e inicializa os mo
 
 const app = express();
 
-// Configuração do CORS para permitir acessos conforme necessário
+const allowedOrigins = [
+  'https://main.d1txub5s9ryib1.amplifyapp.com', // Frontend hospedado no Amplify
+  'https://backend-daffi.railway.app' // Backend para testes locais, se necessário
+];
+
 const corsOptions = {
-  origin: '*', // Ajuste conforme necessário para maior segurança
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Permite origens especificadas ou nenhuma origem (caso origin seja undefined)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // A origem é permitida
+    } else {
+      callback(new Error('Not allowed by CORS')); // A origem não é permitida
+    }
+  },
+  credentials: true, // Permite envio de cookies e headers de autenticação
 };
 
-app.use(cors(corsOptions)); // Habilita o CORS com a configuração
+// Uso do CORS no Express
+app.use(cors(corsOptions));
+
 app.use(express.json()); // Middleware para fazer o parsing de JSON
 
 // Definindo as rotas
