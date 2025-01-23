@@ -7,12 +7,11 @@ import { importarCSV } from './scripts/ImportarCSV'; // Importe a função de im
 import orcamentoRoutes from './routes/orcamentoRoutes';
 import { spawn } from 'child_process';
 import pdfRoutes from './routes/pdfRoutes';
-
 import './models';  // Aqui você chama o arquivo que importa e inicializa os modelos
 
 const allowedOrigins = [
   'https://main.d1txub5s9ryib1.amplifyapp.com', // Frontend hospedado no Amplify
-  'https://backend-daffi.railway.app', // Backend hospedado no Railway
+  'https://backend-daffi.railway.app', // Backend no Railway (se necessário)
 ];
 
 const corsOptions = {
@@ -30,12 +29,9 @@ const corsOptions = {
 
 const app = express();
 app.use(cors(corsOptions));
-
 // Adicione uma resposta explícita para requisições OPTIONS
-app.options('*', cors(corsOptions)); // Permite requisições preflight para qualquer rota
-
+app.options('*', cors(corsOptions)); // Permite OPTIONS para todas as rotas
 app.use(express.json()); // Middleware para fazer o parsing de JSON
-
 // Definindo as rotas
 app.use('/api/orcamentos', orcamentoRoutes);
 app.use('/api/orcamento', orcamentoRoutes);  // Rota para orçamentos
