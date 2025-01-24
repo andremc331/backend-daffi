@@ -9,22 +9,19 @@ import { spawn } from 'child_process';
 import pdfRoutes from './routes/pdfRoutes';
 import './models';  // Aqui você chama o arquivo que importa e inicializa os modelos
 
-const allowedOrigins = [
-  'https://main.d1txub5s9ryib1.amplifyapp.com', // Frontend hospedado no Amplify
-  'https://backend-daffi.railway.app', // Backend no Railway (se necessário)
-];
-
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    const allowedOrigins = [
+      'https://main.d1txub5s9ryib1.amplifyapp.com', // Frontend no Amplify
+    ];
+
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // A origem é permitida
+      callback(null, true); // Origem permitida
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error('Not allowed by CORS'), false); // Origem não permitida
     }
   },
-  credentials: true, // Permitir cookies e autenticação
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Métodos permitidos
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Headers permitidos
+  credentials: true,
 };
 
 const app = express();
