@@ -12,7 +12,7 @@ import './models';  // Aqui você chama o arquivo que importa e inicializa os mo
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
     const allowedOrigins = [
-      'https://main.d1txub5s9ryib1.amplifyapp.com', // Frontend no Amplify
+      process.env.CORS_ALLOWED_ORIGIN
     ];
 
     if (!origin || allowedOrigins.includes(origin)) {
@@ -27,7 +27,7 @@ const corsOptions = {
 const app = express();
 app.use(cors(corsOptions));
 // Adicione uma resposta explícita para requisições OPTIONS
-app.options('*', cors(corsOptions)); // Permite OPTIONS para todas as rotas
+
 app.use(express.json()); // Middleware para fazer o parsing de JSON
 // Definindo as rotas
 app.use('/api/orcamentos', orcamentoRoutes);

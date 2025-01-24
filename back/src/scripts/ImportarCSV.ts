@@ -38,7 +38,6 @@ export const importarCSV = async () => {
 
     // Percorra os dados
     for (const row of parsed.data) {
-      // Validação mais robusta dos dados antes de salvar no banco
       if (
         row &&
         row.codigo &&
@@ -47,23 +46,30 @@ export const importarCSV = async () => {
         !isNaN(parseFloat(row.material)) &&
         !isNaN(parseFloat(row.maoDeObra)) &&
         !isNaN(parseFloat(row.total)) &&
-        parseFloat(row.material) >= 0 &&  // Permite material igual a 0
-        parseFloat(row.maoDeObra) >= 0 && // Permite mão de obra igual a 0
-        parseFloat(row.total) >= 0 // Permite total igual a 0
+        parseFloat(row.material) >= 0 &&
+        parseFloat(row.maoDeObra) >= 0 &&
+        parseFloat(row.total) >= 0
       ) {
         try {
-          await Item.create({
-            codigo: row.codigo,
-            nome: row.nome,
-            unidade: row.unidade,
-            material: parseFloat(row.material),
-            maoDeObra: parseFloat(row.maoDeObra),
-            total: parseFloat(row.total),
-          });
+          // Verifique se o item já existe no banco de dados
+          const existingItem = await Item.findOne({ where: { codigo: row.codigo } });
+    
+          if (!existingItem) {
+            // Cria o item apenas se ele não existir
+            await Item.create({
+              codigo: row.codigo,
+              nome: row.nome,
+              unidade: row.unidade,
+              material: parseFloat(row.material),
+              maoDeObra: parseFloat(row.maoDeObra),
+              total: parseFloat(row.total),
+            });
+          } else {
+            console.log(`Item com código ${row.codigo} já existe. Ignorando...`);
+          }
         } catch (err) {
           if (err instanceof Error) {
             console.error('Erro ao salvar item:', err.message);
-            // Caso deseje registrar o erro em um arquivo de log
             fs.appendFileSync('./src/data/error_log.txt', `Erro ao salvar item: ${JSON.stringify(row)} - ${err.message}\n`);
           } else {
             console.error('Erro desconhecido ao salvar item:', err);
@@ -71,7 +77,6 @@ export const importarCSV = async () => {
         }
       } else {
         console.warn('Dados inválidos encontrados e ignorados:', row);
-        // Caso deseje registrar os dados inválidos
         fs.appendFileSync('./src/data/invalid_data_log.txt', `Dados inválidos: ${JSON.stringify(row)}\n`);
       }
     }
