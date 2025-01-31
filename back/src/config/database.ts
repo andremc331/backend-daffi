@@ -8,19 +8,15 @@ dotenv.config();
 
 // Criação da instância do Sequelize para se conectar ao PostgreSQL
 const sequelize = new Sequelize({
-  dialect: "postgres",
-  host: "autorack.proxy.rlwy.net",
+  dialect: 'postgres',
+  host: 'autorack.proxy.rlwy.net',
   port: 12644,
-  username: "postgres",
-  password: "BnMZXdCYyNmjhfudskDnvNNDTlZKekWy",
-  database: "railway",
+  username: 'postgres',
+  password: 'BnMZXdCYyNmjhfudskDnvNNDTlZKekWy',
+  database: 'railway',
   logging: false,
   dialectOptions: {
-    ssl: {
-      require: true,  // Exige SSL
-      rejectUnauthorized: false,  // Evita erro de certificado
-    },
-    connectTimeout: 10000,  // Tempo limite de 10 segundos
+    connectTimeout: 10000,  // tempo limite de 10 segundos para conectar
   },
 });
 
@@ -40,5 +36,26 @@ sequelize.authenticate()
   .catch((err) => {
     console.error('Erro ao sincronizar modelos:', err);
   });  
+
+// Função para encerrar o processo de forma limpa
+const shutdown = (signal: string) => {
+  return (err?: Error) => {
+    console.log(`${signal} recebido...`);
+    if (err) console.error(err.stack || err);
+
+    // Aguardar um tempo para garantir que o processo seja fechado corretamente
+    setTimeout(() => {
+      console.log('Esperando 5 segundos, encerrando...');
+      process.exit(err ? 1 : 0); // Encerra o processo com código 0 (sucesso) ou 1 (erro)
+    }, 5000).unref(); // Desreferencia o temporizador para não bloquear o encerramento
+  };
+};
+
+// Adicionar tratamento para SIGTERM (geralmente enviado quando o container é desligado)
+process.on('SIGTERM', shutdown('SIGTERM'));
+// Adicionar tratamento para SIGINT (interrupção via Ctrl+C)
+process.on('SIGINT', shutdown('SIGINT'));
+// Adicionar tratamento para exceções não capturadas
+process.on('uncaughtException', shutdown('uncaughtException'));
 
 export default sequelize;
