@@ -8,6 +8,8 @@ import orcamentoRoutes from './routes/orcamentoRoutes';
 import { spawn } from 'child_process';
 import pdfRoutes from './routes/pdfRoutes';
 import './models';  // Aqui você chama o arquivo que importa e inicializa os modelos
+import midiaRoutes from './routes/midiaRoutes';
+import path from 'path';
 
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
@@ -30,6 +32,10 @@ app.use(cors(corsOptions));
 
 app.use(express.json()); // Middleware para fazer o parsing de JSON
 // Definindo as rotas
+// Middleware para servir arquivos estáticos da pasta de uploads
+app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
+// Rotas
+app.use('/midias', midiaRoutes);
 app.use('/api/orcamentos', orcamentoRoutes);
 app.use('/api/orcamento', orcamentoRoutes);  // Rota para orçamentos
 app.use('/users', userRoutes);  // Rota para usuários
@@ -59,7 +65,7 @@ sequelize.sync({ alter: true })
   });
 
 // Iniciando o servidor na porta 3001
-const PORT = 3001;
+const PORT = 3005;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor rodando e acessível externamente em http://<seu-ip>:${PORT}`);
 });
