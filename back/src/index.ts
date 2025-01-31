@@ -63,7 +63,7 @@ sequelize.sync({ alter: true })
   .catch((err) => {
     console.error('Erro ao sincronizar banco de dados ou importar CSV', err);
   });
-
+//manter na porta 3001
 // Iniciando o servidor na porta 3001
 const PORT = 3001;
 app.listen(PORT, '0.0.0.0', () => {
