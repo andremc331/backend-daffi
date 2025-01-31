@@ -65,7 +65,7 @@ sequelize.sync({ alter: true })
   });
 
 // Iniciando o servidor na porta 3001
-const PORT = 3005;
+const PORT = 3001;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor rodando e acessível externamente em http://<seu-ip>:${PORT}`);
 });
