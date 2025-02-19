@@ -50,7 +50,7 @@ const shutdown = (signal: string) => {
     }, 5000).unref(); // Desreferencia o temporizador para não bloquear o encerramento
   };
 };
-
+/////
 // Adicionar tratamento para SIGTERM (geralmente enviado quando o container é desligado)
 process.on('SIGTERM', shutdown('SIGTERM'));
 // Adicionar tratamento para SIGINT (interrupção via Ctrl+C)
