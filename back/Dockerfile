@@ -14,4 +14,4 @@ RUN npm install
 COPY . .
 
 # Rodar o projeto com ts-node
-CMD ["npx", "ts-node", "index.ts"]
+CMD ["npx", "ts-node", "src/index.ts"]
