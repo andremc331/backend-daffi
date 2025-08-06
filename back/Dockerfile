@@ -1,19 +1,17 @@
-FROM node:16
+# Usar imagem base leve
+FROM node:20-slim
 
-# Definir o diretório de trabalho
+# Definir diretório de trabalho
 WORKDIR /app
 
-# Copiar os arquivos de dependências para o diretório de trabalho
-COPY ./package.json ./package-lock.json ./
+# Copiar os arquivos de dependência
+COPY package*.json ./
 
-# Instalar as dependências
+# Instalar dependências
 RUN npm install
 
-# Copiar o restante dos arquivos do projeto
+# Copiar todo o restante do código
 COPY . .
 
-# Instalar o ts-node globalmente
-RUN npm install ts-node --save-dev
-
-# Rodar o código TypeScript diretamente
+# Rodar o projeto com ts-node
 CMD ["npx", "ts-node", "index.ts"]
