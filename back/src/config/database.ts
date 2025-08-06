@@ -6,17 +6,31 @@ import { OrcamentoItem } from '../models/orcamentoitemModel';
 import dotenv from 'dotenv';
 dotenv.config();
 
+// // Criação da instância do Sequelize para se conectar ao PostgreSQL
+// const sequelize = new Sequelize({
+//   dialect: 'postgres',
+//   host: 'autorack.proxy.rlwy.net',
+//   port: 12644,
+//   username: 'postgres',
+//   password: 'BnMZXdCYyNmjhfudskDnvNNDTlZKekWy',
+//   database: 'railway',
+//   logging: false,
+//   dialectOptions: {
+//     connectTimeout: 10000,  // tempo limite de 10 segundos para conectar
+//   },
+// });
+
 // Criação da instância do Sequelize para se conectar ao PostgreSQL
 const sequelize = new Sequelize({
-  dialect: 'postgres',
-  host: 'autorack.proxy.rlwy.net',
-  port: 12644,
-  username: 'postgres',
-  password: 'BnMZXdCYyNmjhfudskDnvNNDTlZKekWy',
-  database: 'railway',
+  dialect: process.env.DB_DIALECT as any,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT ? Number(process.env.DB_PORT) : undefined,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   logging: false,
   dialectOptions: {
-    connectTimeout: 10000,  // tempo limite de 10 segundos para conectar
+    connectTimeout: 10000,
   },
 });
 
