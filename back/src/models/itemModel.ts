@@ -37,6 +37,7 @@ Item.init(
     codigo: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true, // Garante que o código seja único
     },
     nome: {
       type: DataTypes.STRING,

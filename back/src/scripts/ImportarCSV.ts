@@ -52,13 +52,16 @@ export const importarCSV = async () => {
         parseFloat(row.total) >= 0 // Permite total igual a 0
       ) {
         try {
-          await Item.create({
-            codigo: row.codigo,
-            nome: row.nome,
-            unidade: row.unidade,
-            material: parseFloat(row.material),
-            maoDeObra: parseFloat(row.maoDeObra),
-            total: parseFloat(row.total),
+          await Item.findOrCreate({
+            where: { codigo: row.codigo },
+            defaults: {
+              codigo: row.codigo,
+              nome: row.nome,
+              unidade: row.unidade,
+              material: parseFloat(row.material),
+              maoDeObra: parseFloat(row.maoDeObra),
+              total: parseFloat(row.total),
+            },
           });
         } catch (err) {
           if (err instanceof Error) {
